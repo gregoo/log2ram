@@ -22,7 +22,7 @@ remountOriginal() {
 syncToDisk () {
     isSafe
 
-    if [ -x "$(command -v rsync)" ]; then
+    if [ -x "$(command -v rsync)" ] && [ "$USE_RSYNC" != "false" ]; then
         rsync -aXv --inplace --no-whole-file --delete-after "$RAM_LOG"/ "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     else
         cp -rfup "$RAM_LOG"/ -T "$HDD_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
@@ -47,7 +47,7 @@ syncFromDisk () {
         exit 1
     fi
 
-    if [ -x "$(command -v rsync)" ]; then
+    if [ -x "$(command -v rsync)" ] && [ "$USE_RSYNC" != "false" ]; then
         rsync -aXv --inplace --no-whole-file --delete-after "$HDD_LOG"/ "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
     else
         cp -rfup "$HDD_LOG"/ -T "$RAM_LOG"/ 2>&1 | tee -a "$LOG2RAM_LOG"
